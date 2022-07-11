@@ -59,7 +59,7 @@ export default {
             const rooms = await ChatRoomModel.getChatRoomsByUserId(currentLoggedUser);
             const roomIds = rooms.map(room => room._id);
             const recentConversation = await ChatMessageModel.getRecentConversation(
-                roomIds, options, currentLoggedUser
+                roomIds, options
             );
             return res.status(200).json({success: true, conversation: recentConversation});
         } catch (error) {

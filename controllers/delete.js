@@ -4,9 +4,9 @@ import ChatMessageModel from '../models/ChatMessage.js';
 export default {
     deleteRoomById: async (req, res) => {
         try {
-            const {roomId} = req.params;
-            const room = await ChatRoomModel.removeChatRoomById({_id: roomId})
-            const messages = await ChatMessageModel.remove({chatRoomId: roomId})
+            const roomId = req.params.roomId
+            const room = await ChatRoomModel.removeChatRoomById(roomId)
+            const messages = await ChatMessageModel.removeMessagesByRoomId(roomId)
             return res.status(200).json({
                 success: true,
                 message: "Operation performed succesfully",
@@ -19,8 +19,8 @@ export default {
     },
     deleteMessageById: async (req, res) => {
         try {
-            const {messageId} = req.params;
-            const message = await ChatMessageModel.remove({_id: messageId})
+            const messageId = req.params.messageId
+            const message = await ChatMessageModel.removeMessageById(messageId)
             return res.status(200).json({
                 success: true,
                 deletedMessagesCount: message.deletedCount,

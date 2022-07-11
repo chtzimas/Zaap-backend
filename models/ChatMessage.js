@@ -171,9 +171,8 @@ chatMessageSchema.statics.markMessageRead = async function (chatRoomId, currentU
 /**
  * @param {Array} chatRoomIds - chat room ids
  * @param {{ page, limit }} options - pagination options
- * @param {String} currentUserOnlineId - user id
  */
-chatMessageSchema.statics.getRecentConversation = async function (chatRoomIds, options, currentUserOnlineId) {
+chatMessageSchema.statics.getRecentConversation = async function (chatRoomIds, options) {
     try {
         return this.aggregate([
             {$match: {chatRoomId: {$in: chatRoomIds}}},
@@ -256,7 +255,20 @@ chatMessageSchema.statics.getRecentConversation = async function (chatRoomIds, o
 
 
 /**
- * @param {String} messageId - the id of the chat room the user wishes to remove
+ * @param {String} roomId - the id of the chat room the user wishes to remove the messages from
+ */
+chatMessageSchema.statics.removeMessagesByRoomId = async function (roomId) {
+    try {
+        const message = this.remove({chatRoomId: roomId})
+        return message
+    } catch (error) {
+        console.log('error on removing a message by room id', error);
+        throw error;
+    }
+}
+
+/**
+ * @param {String} messageId - the id of the message the user wishes to remove
  */
 chatMessageSchema.statics.removeMessageById = async function (messageId) {
     try {
