@@ -2,7 +2,7 @@ import http from "http";
 import express from "express";
 import logger from "morgan";
 import cors from "cors"
-import { Server } from "socket.io";
+import {Server} from "socket.io";
 // mongo connection
 import "../config/mongo.js";
 // socket configuration
@@ -13,7 +13,7 @@ import userRouter from "../routes/user.js";
 import chatRoomRouter from "../routes/chatRoom.js";
 import deleteRouter from "../routes/delete.js";
 // middlewares
-import { decode } from '../middlewares/auth.js'
+import {decode} from '../middlewares/auth.js'
 
 const app = express();
 
@@ -23,7 +23,7 @@ app.set("port", port);
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({extended: false}));
 
 app.use("/login", indexRouter);
 app.use("/user", userRouter);
@@ -32,7 +32,7 @@ app.use("/delete", deleteRouter);
 
 /** catch 404 and forward to error handler */
 app.use('*', (req, res) => {
-    return res.status(404).json({ success: false, message: 'API endpoint doesn\'t exist' })
+    return res.status(404).json({success: false, message: 'API endpoint doesn\'t exist'})
 });
 
 /** Create HTTP server. */
