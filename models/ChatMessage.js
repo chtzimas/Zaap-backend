@@ -232,7 +232,6 @@ chatMessageSchema.statics.getRecentConversation = async function (chatRoomIds, o
                     as: 'readByRecipients.readByUser',
                 }
             },
-
             {
                 $group: {
                     _id: '$roomInfo._id',

@@ -92,5 +92,21 @@ export default {
         }
     },
     markConversationReadByRoomId: async (req, res) => {
+        try {
+            const {roomId} = req.params;
+            const room = await ChatRoomModel.getChatRoomByRoomId(roomId)
+            if (!room) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'No room exists for this id',
+                })
+            }
+            const currentLoggedUser = req.userId;
+            const result = await ChatMessageModel.markMessageRead(roomId, currentLoggedUser);
+            return res.status(200).json({success: true, data: result});
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({success: false, error: error.message});
+        }
     },
 }
