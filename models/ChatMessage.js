@@ -254,4 +254,18 @@ chatMessageSchema.statics.getRecentConversation = async function (chatRoomIds, o
     }
 }
 
+
+/**
+ * @param {String} messageId - the id of the chat room the user wishes to remove
+ */
+chatMessageSchema.statics.removeMessageById = async function (messageId) {
+    try {
+        const message = this.remove({_id: messageId})
+        return message
+    } catch (error) {
+        console.log('error on removing a message by id', error);
+        throw error;
+    }
+}
+
 export default mongoose.model("ChatMessage", chatMessageSchema);
