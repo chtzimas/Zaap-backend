@@ -8,7 +8,7 @@ import "../config/mongo.js";
 // socket configuration
 import WebSockets from "../utils/WebSockets.js";
 // routes
-import indexRouter from "../routes/index.js";
+import indexRouter from "../routes/login.js";
 import userRouter from "../routes/user.js";
 import chatRoomRouter from "../routes/chatRoom.js";
 import deleteRouter from "../routes/delete.js";
@@ -25,8 +25,8 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 
-app.use("/login", indexRouter);
 app.use("/user", userRouter);
+app.use("/login", indexRouter);
 app.use("/room", decode, chatRoomRouter);
 app.use("/delete", deleteRouter);
 
