@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 import {v4 as uuidv4} from "uuid";
 
-export const CHAT_ROOM_TYPES = {
-    CONSUMER_TO_CONSUMER: "consumer-to-consumer",
-    CONSUMER_TO_SUPPORT: "consumer-to-support",
-};
-
 const chatRoomSchema = new mongoose.Schema(
     {
         _id: {
@@ -51,16 +46,14 @@ chatRoomSchema.statics.getChatRoomByRoomId = async function (roomId) {
 /**
  * @param {Array} userIds - array of strings of userIds
  * @param {String} chatInitiator - user who initiated the chat
- * @param {CHAT_ROOM_TYPES} type
  */
-chatRoomSchema.statics.initiateChat = async function (userIds, type, chatInitiator) {
+chatRoomSchema.statics.initiateChat = async function (userIds, chatInitiator) {
     try {
         const availableRoom = await this.findOne({
             userIds: {
                 $size: userIds.length,
                 $all: [...userIds],
-            },
-            type,
+            }
         });
         if (availableRoom) {
             return {
@@ -71,7 +64,7 @@ chatRoomSchema.statics.initiateChat = async function (userIds, type, chatInitiat
             };
         }
 
-        const newRoom = await this.create({userIds, type, chatInitiator});
+        const newRoom = await this.create({userIds, chatInitiator});
         return {
             isNew: true,
             message: 'creating a new chatroom',

@@ -1,20 +1,15 @@
 import mongoose from "mongoose";
 import {v4 as uuidv4} from "uuid";
 
-export const USER_TYPES = {
-    CONSUMER: "consumer",
-    SUPPORT: "support",
-};
-
 const userSchema = new mongoose.Schema(
     {
         _id: {
             type: String,
             default: () => uuidv4().replace(/\-/g, ""),
         },
-        firstName: String,
-        lastName: String,
-        type: String,
+        email: String,
+        username: String,
+        password: String
     },
     {
         timestamps: true,
@@ -23,13 +18,14 @@ const userSchema = new mongoose.Schema(
 );
 
 /**
- * @param {String} firstName
- * @param {String} lastName
+ * @param {String} email
+ * @param {String} username
+ * @param {String} password
  * @returns {Object} new user object created
  */
-userSchema.statics.createUser = async function (firstName, lastName, type) {
+userSchema.statics.createUser = async function (email, username, password) {
     try {
-        const user = await this.create({firstName, lastName, type});
+        const user = await this.create({email, username, password});
         return user;
     } catch (error) {
         throw error;

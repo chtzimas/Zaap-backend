@@ -1,5 +1,5 @@
 import makeValidation from '@withvoid/make-validation';
-import ChatRoomModel, {CHAT_ROOM_TYPES} from "../models/ChatRoom.js";
+import ChatRoomModel from "../models/ChatRoom.js";
 import ChatMessageModel from "../models/ChatMessage.js";
 import UserModel from "../models/User.js"
 
@@ -12,8 +12,7 @@ export default {
                     userIds: {
                         type: types.array,
                         options: {unique: true, empty: false, stringOnly: true}
-                    },
-                    type: {type: types.enum, options: {enum: CHAT_ROOM_TYPES}},
+                    }
                 }
             }));
             if (!validation.success) return res.status(400).json({...validation});
