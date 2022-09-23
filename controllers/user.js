@@ -4,8 +4,20 @@ export default {
     onCreateUser: async (req, res) => {
         try {
             const {email, username, password} = req.body
+            const {userExists, emailExists, usernameExists} = await UserModel.userExistsInfo(email, username)
+            if (userExists) {
+                let error
+                if (emailExists && !usernameExists) {
+                    error = {message: "Email is already in use."}
+                } else if (!emailExists && usernameExists) {
+                    error = {message: "Username is already in use."}
+                } else {
+                    error = {message: "Email and username are already in use."}
+                }
+                return res.status(409).send(error)
+            }
             const user = await UserModel.createUser(email, username, password);
-            return res.status(200).json({success: true, data: user})
+            return res.status(201).json({success: true, user: user})
         } catch (error) {
             return res.status(500).json({success: false, error: error})
         }

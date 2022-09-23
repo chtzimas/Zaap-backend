@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import {v4 as uuidv4} from "uuid";
+import {query} from "express";
 
 const userSchema = new mongoose.Schema(
     {
@@ -71,12 +72,38 @@ userSchema.statics.deleteUserById = async function (id) {
     }
 }
 
+/**
+ * @param {Array} ids - list of user ids
+ * @return {Array} - list of the users with the ids provided
+ */
+
 userSchema.statics.getUserByIds = async function (ids) {
     try {
         const users = await this.find({_id: {$in: ids}});
         return users;
     } catch (error) {
         throw error;
+    }
+}
+
+/**
+ * @param {String} email
+ * @param {String} username
+ * @return {Array} - list with info regarding whether the user already exists
+ */
+
+userSchema.statics.userExistsInfo = async function (email, username) {
+    try {
+        const emailQuery = {email: email}
+        const usernameQuery = {username: username}
+        const userWithSameEmail = await this.findOne(emailQuery)
+        const userWithSameName = await this.findOne(usernameQuery)
+        const emailExists = userWithSameEmail != null
+        const usernameExists = userWithSameName != null
+        const userExists = emailExists || usernameExists
+        return {userExists: userExists, emailExists, usernameExists}
+    } catch (error) {
+        throw error
     }
 }
 
